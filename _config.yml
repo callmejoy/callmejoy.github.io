@@ -1,1 +1,9 @@
-baseurl: /index
+auto: true
+
+markdown: rdiscount
+pygments: true
+paginate: 8
+permalink: /:title
+
+url: http://magiczhou.com
+feed: /index.xml
