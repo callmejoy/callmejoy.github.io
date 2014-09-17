@@ -1,1 +1,35 @@
-.prettyprint{color:#fff;background:#444!important;font-family:Monaco,Consolas,monospace;font-size:14px;line-height:1.5;border:1px solid #ccc;padding:10px!important}pre .str,code .str{color:#65b042}pre .kwd,code .kwd{color:#e28964}pre .com,code .com{color:#aeaeae;font-style:italic}pre .typ,code .typ{color:#89bdff}pre .lit,code .lit{color:#3387cc}pre .pun,code .pun{color:#fff}pre .pln,code .pln{color:#fff}pre .tag,code .tag{color:#89bdff}pre .atn,code .atn{color:#bdb76b}pre .atv,code .atv{color:#65b042}pre .dec,code .dec{color:#3387cc}
+/*
+ * Derived from einaros's Sons of Obsidian theme at
+ * http://studiostyl.es/schemes/son-of-obsidian by
+ * Alex Ford of CodeTunnel:
+ * http://CodeTunnel.com/blog/post/71/google-code-prettify-obsidian-theme
+ */
+
+.str{color: #EC7600;}
+.kwd{color:#93C763;}
+.com{color:#66747B;}
+.typ{color:#678CB1;}
+.lit{color:#FACD22;}
+.pun{color:#F1F2F3;}
+.pln{color:#F1F2F3;}
+.tag{color:#8AC763;}
+.atn{color:#E0E2E4;}
+.atv{color:#EC7600;}
+.dec{color:purple;}
+pre.prettyprint {border:0px solid #888;}
+ol.linenums{margin-top:0;margin-bottom:0;}
+.prettyprint{background:#000;}
+li.L0, li.L1, li.L2, li.L3, li.L4, li.L5, li.L6, li.L7, li.L8, li.L9{color:#555;}
+li.L1, li.L3, li.L5, li.L7, li.L9{background:#111;}
+@media print {
+    .str{color:#060;}
+    .kwd{color:#006;font-weight:bold;}
+    .com{color:#600;font-style:italic;}
+    .typ{color:#404;font-weight:bold;}
+    .lit{color:#044;}
+    .pun{color:#440;}
+    .pln{color:#000;}
+    .tag{color:#006;font-weight:bold;}
+    .atn{color:#404;}
+    .atv{color:#060;}
+}
