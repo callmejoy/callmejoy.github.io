@@ -1,0 +1,108 @@
+# Android二维码相关操作嵌入  
+------------------
+Android中二维码的相关操作需要用到一个开源库:zxing
+> 下载地址URL：https://github.com/zxing/zxing.git  
+
+
+解压后导入com.app.zxing.camera、com.app.zxing.decoding、com.app.zxing.view三个包，编写扫描工具界面xml文件<br />activity_capture.xml
+```  
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+        android:layout_height="fill_parent" >
+
+    <RelativeLayout
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent" >
+
+        <SurfaceView
+            android:id="@+id/preview_view"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:layout_gravity="center" />
+
+        <com.mining.app.zxing.view.ViewfinderView
+            android:id="@+id/viewfinder_view"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <include
+            android:id="@+id/include1"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            layout="@layout/activity_title" />
+    </RelativeLayout>
+
+</FrameLayout>  
+```  
+
+在AndroidMainfest.xml中注册摄像头和自动对焦相关的权限
+```  
+<uses-permission android:name="android.permission.CAMERA" >
+    </uses-permission>
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" >
+    </uses-permission>
+
+    <uses-feature android:name="android.hardware.camera" />
+    <uses-feature android:name="android.hardware.camera.autofocus" />
+
+    <uses-permission android:name="android.permission.VIBRATE" />
+    <uses-permission android:name="android.permission.FLASHLIGHT" />
+```  
+然后导入扫描界面的功能类MipcaActivityCapture.java,在主程序中设置扫描器的序列号之后跳转至该界面
+```
+Intent intent = new Intent();
+intent.setClass(BtcPayPage.this, MipcaActivityCapture.class);
+intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+startActivityForResult(intent, SCANNIN_GREQUEST_CODE); // SCANNIN_CODE为扫描器的序列号
+
+
+//在主程序中重写扫描内容回掉接口
+@Override
+	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+		super.onActivityResult(requestCode, resultCode, data);
+		switch (requestCode) {
+		case SCANNIN_GREQUEST_CODE:
+			if (resultCode == RESULT_OK) {
+				Bundle bundle = data.getExtras();
+				// 显示扫描到的内容,这里的btc_count是一个TextView
+				btc_count.setText(bundle.getString("result"));
+			}
+			break;
+		}
+	}  
+``` 
+------------------------
+## 根据string内容生成二维码 
+```  
+/**
+	 * 生成二维码
+	 * 
+	 * @param str
+	 * @return bitmap
+	 * @throws WriterException
+	 */
+	public Bitmap Create2DCode(String str) throws WriterException {
+		// 生成二维矩阵,编码时指定大小,不要生成了图片以后再进行缩放,这样会模糊导致识别失败
+		BitMatrix matrix = new MultiFormatWriter().encode(str,
+				BarcodeFormat.QR_CODE, 300, 300);
+		int width = matrix.getWidth();
+		int height = matrix.getHeight();
+		// 二维矩阵转为一维像素数组,也就是一直横着排了
+		int[] pixels = new int[width * height];
+		for (int y = 0; y < height; y++) {
+			for (int x = 0; x < width; x++) {
+				if (matrix.get(x, y)) {
+					// 把对应位置的像素点设置为黑色
+					pixels[y * width + x] = 0xff000000;
+				}
+			}
+		}
+		Bitmap bitmap = Bitmap.createBitmap(width, height,
+				Bitmap.Config.ARGB_8888);
+		// 通过像素数组生成bitmap,具体参考api
+		bitmap.setPixels(pixels, 0, width, 0, 0, width, height);
+		return bitmap;
+	}  
+```
